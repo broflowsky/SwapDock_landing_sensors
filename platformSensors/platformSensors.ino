@@ -21,14 +21,20 @@ short readingsTotal = 0;
 short readIndex = 0;
 
 //threshold that means a drone has landed
-const short THRESH = 970*NUM_READINGS;//TBD with actual platform
+// 970/1023 = 95%
+const short _THRESH_PERCENT = 800;//
+const short THRESH = _THRESH_PERCENT*NUM_READINGS;//TBD with actual platform
 
 
 void setup() {
   Serial.begin(9600);
-  pinMode(D1,OUTPUT);
+  pinMode(LED_BUILTIN,OUTPUT);
   sensorInit();
-
+  Serial.flush();
+  Serial.print("Threshold value: ");
+  Serial.println(THRESH);
+  Serial.print("Threshold percent: ");
+  Serial.println(_THRESH_PERCENT);
 }
 
 void loop() {
@@ -37,11 +43,11 @@ void loop() {
   Serial.println(readingsTotal);
   if (readingsTotal > THRESH)
   {
-    digitalWrite(D1,HIGH);
+    digitalWrite(LED_BUILTIN,HIGH);
   }
-  else digitalWrite(D1,LOW);
+  else digitalWrite(LED_BUILTIN,LOW);
 
-  delay(10);
+  delay(1);
 
 }
 void sensorInit() {
