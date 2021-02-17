@@ -8,12 +8,12 @@
 */
 
 //Input pins
-const byte NUM_SENSOR = 1;
+const byte NUM_SENSOR = 2;
 const byte sensor_pin0 = A0;
-//const byte sensor_pin1 = A1;
+const byte sensor_pin1 = A1;
 //const byte sensor_pin2 = A2;
 //const byte sensor_pins[NUM_SENSOR] = {sensor_pin0, sensor_pin1, sensor_pin2};
-const byte sensor_pins[NUM_SENSOR] = {A0};
+const byte sensor_pins[NUM_SENSOR] = {A0, A1};
 //average filter
 const byte NUM_READINGS = 8;
 short readings[NUM_READINGS];
@@ -21,14 +21,14 @@ short readingsTotal = 0;
 short readIndex = 0;
 
 //threshold that means a drone has landed
-// 970/1023 = 95%
-const short _THRESH_PERCENT = 800;//
-const short THRESH = _THRESH_PERCENT*NUM_READINGS;//TBD with actual platform
+// 970/1023 = 0.948 =>95%
+const short _THRESH_PERCENT = 205;//
+const short THRESH = _THRESH_PERCENT * NUM_READINGS; //TBD with actual platform
 
 
 void setup() {
   Serial.begin(9600);
-  pinMode(LED_BUILTIN,OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
   sensorInit();
   Serial.flush();
   Serial.print("Threshold value: ");
@@ -43,9 +43,10 @@ void loop() {
   Serial.println(readingsTotal);
   if (readingsTotal > THRESH)
   {
-    digitalWrite(LED_BUILTIN,HIGH);
+    digitalWrite(LED_BUILTIN, HIGH);
+    Serial.println("DRONE_LANDED");
   }
-  else digitalWrite(LED_BUILTIN,LOW);
+  else digitalWrite(LED_BUILTIN, LOW);
 
   delay(1);
 
